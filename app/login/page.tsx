@@ -1,12 +1,9 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
 import { FormEvent, useState } from "react";
 
 export default function LoginPage() {
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -14,14 +11,14 @@ export default function LoginPage() {
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
     setLoading(true);
     setError("");
 
     const result = await signIn("credentials", {
       email,
       password,
-      redirect: false,
-      callbackUrl,
+      redirect: false
     });
 
     setLoading(false);
@@ -31,7 +28,7 @@ export default function LoginPage() {
       return;
     }
 
-    window.location.href = callbackUrl;
+    window.location.href = "/";
   }
 
   return (
@@ -40,19 +37,19 @@ export default function LoginPage() {
         <div className="text-xs tracking-[0.2em] uppercase text-neutral-500 mb-3">
           Inventory Intelligence
         </div>
-        <h1 className="text-4xl font-semibold tracking-tight mb-2">Вход</h1>
-        <p className="text-neutral-600 mb-6">
-          Войдите под owner-аккаунтом.
-        </p>
+
+        <h1 className="text-4xl font-semibold tracking-tight mb-2">
+          Вход
+        </h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+
           <input
             type="email"
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-2xl border border-neutral-300 px-4 py-3 outline-none"
-            required
+            className="w-full rounded-2xl border border-neutral-300 px-4 py-3"
           />
 
           <input
@@ -60,21 +57,21 @@ export default function LoginPage() {
             placeholder="Пароль"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-2xl border border-neutral-300 px-4 py-3 outline-none"
-            required
+            className="w-full rounded-2xl border border-neutral-300 px-4 py-3"
           />
 
-          {error ? (
-            <div className="text-sm text-red-600">{error}</div>
-          ) : null}
+          {error && (
+            <div className="text-red-600 text-sm">{error}</div>
+          )}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full rounded-2xl bg-black text-white py-3 font-medium disabled:opacity-60"
+            className="w-full rounded-2xl bg-black text-white py-3"
           >
             {loading ? "Входим..." : "Войти"}
           </button>
+
         </form>
       </div>
     </main>
