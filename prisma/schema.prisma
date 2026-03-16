@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Upload {
+  id         String            @id @default(cuid())
+  fileName   String
+  sheetName  String?
+  uploadedAt DateTime          @default(now())
+  uploadedBy String?
+  items      ProductSnapshot[]
+}
+
+model ProductSnapshot {
+  id               String   @id @default(cuid())
+  uploadId         String
+  upload           Upload   @relation(fields: [uploadId], references: [id], onDelete: Cascade)
+  name             String
+  price            Float?
+  lastSaleDate     DateTime?
+  lastDeliveryDate DateTime?
+  daysInStock      Int?
+  soldUnits        Int?
+  stockLeft        Int?
+  turnoverPerDay   Float?
+  stockDays        Float?
+  selloutDate      DateTime?
+  idealOrder       Int?
+  status           String?
+  stockLabel       String?
+
+  @@index([uploadId])
+  @@index([name])
+}
+
+model Settings {
+  id                  String  @id @default(cuid())
+  mustReallocateMin   Float   @default(5000)
+  maybeReallocateMin  Float   @default(3000)
+  keepMin             Float   @default(1000)
+  normalStockDays     Int     @default(120)
+  criticalStockDays   Int     @default(365)
+}
