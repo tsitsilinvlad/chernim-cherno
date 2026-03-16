@@ -1,78 +1,25 @@
-"use client";
-
-import { signIn } from "next-auth/react";
-import { FormEvent, useState } from "react";
-
-export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    setLoading(true);
-    setError("");
-
-    const result = await signIn("credentials", {
-      email,
-      password,
-      redirect: false
-    });
-
-    setLoading(false);
-
-    if (result?.error) {
-      setError("Неверный email или пароль");
-      return;
-    }
-
-    window.location.href = "/";
-  }
-
+export default function HomePage() {
   return (
-    <main className="min-h-screen bg-neutral-50 flex items-center justify-center p-6">
-      <div className="w-full max-w-md rounded-3xl border border-neutral-200 bg-white p-8 shadow-sm">
-        <div className="text-xs tracking-[0.2em] uppercase text-neutral-500 mb-3">
+    <main style={{ minHeight: "100vh", padding: 40, fontFamily: "Arial, sans-serif", background: "#f5f5f5" }}>
+      <div style={{ maxWidth: 900, margin: "0 auto", background: "white", borderRadius: 24, padding: 32, border: "1px solid #e5e5e5" }}>
+        <div style={{ fontSize: 12, letterSpacing: "0.2em", textTransform: "uppercase", color: "#666", marginBottom: 12 }}>
           Inventory Intelligence
         </div>
+        <h1 style={{ fontSize: 42, margin: 0, marginBottom: 12 }}>Приложение запущено</h1>
+        <p style={{ fontSize: 18, color: "#444", marginBottom: 24 }}>
+          Базовая версия работает. Следующий шаг — подключить загрузку Excel и аналитику оборачиваемости.
+        </p>
 
-        <h1 className="text-4xl font-semibold tracking-tight mb-2">
-          Вход
-        </h1>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full rounded-2xl border border-neutral-300 px-4 py-3"
-          />
-
-          <input
-            type="password"
-            placeholder="Пароль"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full rounded-2xl border border-neutral-300 px-4 py-3"
-          />
-
-          {error && (
-            <div className="text-red-600 text-sm">{error}</div>
-          )}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-2xl bg-black text-white py-3"
-          >
-            {loading ? "Входим..." : "Войти"}
-          </button>
-
-        </form>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 16 }}>
+          <div style={{ padding: 20, border: "1px solid #e5e5e5", borderRadius: 20 }}>
+            <div style={{ fontSize: 14, color: "#666" }}>Статус</div>
+            <div style={{ fontSize: 28, fontWeight: 700, marginTop: 8 }}>Online</div>
+          </div>
+          <div style={{ padding: 20, border: "1px solid #e5e5e5", borderRadius: 20 }}>
+            <div style={{ fontSize: 14, color: "#666" }}>Следующий этап</div>
+            <div style={{ fontSize: 20, fontWeight: 700, marginTop: 8 }}>Импорт Excel</div>
+          </div>
+        </div>
       </div>
     </main>
   );
